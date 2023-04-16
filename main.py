@@ -1,0 +1,45 @@
+import mysql.connector
+username = input("Enter your MySQL username: ")
+password = input("Enter your MySQL password: ")
+try:
+    cnx = mysql.connector.connect(user=username, password=password,
+                                  host='localhost',
+                                  database='LibraryDB')
+    print("Connection successful!")
+
+except mysql.connector.Error as err:
+    print(f"Error connecting to MySQL: {err}")
+
+# Create a cursor object
+cursor = cnx.cursor()
+
+# Call the SQL procedure
+args = input()
+result_args = cursor.callproc('validate_login_credentials', args)
+
+# Get the output parameter value
+valid_login = result_args[2]
+
+# Close the cursor and database connection
+cursor.close()
+cnx.close()
+
+# Check if the login credentials are valid
+if valid_login:
+    print("Login successful!")
+else:
+    print("Invalid username or password.")
+
+
+cursor = cnx.cursor()
+
+# Call the SQL procedure to delete an application
+args = (1,)
+cursor.callproc('delete_application', args)
+
+# Commit the transaction
+cnx.commit()
+
+# Close the cursor and database connection
+cursor.close()
+cnx.close()
