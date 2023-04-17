@@ -10,19 +10,6 @@ try:
 except mysql.connector.Error as err:
     print(f"Error connecting to MySQL: {err}")
 
-# Create a cursor object
-cursor = cnx.cursor()
-
-# Call the SQL procedure
-args = input()
-result_args = cursor.callproc('validate_login_credentials', args)
-
-# Get the output parameter value
-valid_login = result_args[2]
-
-# Close the cursor and database connection
-cursor.close()
-cnx.close()
 
 # Check if the login credentials are valid
 if valid_login:

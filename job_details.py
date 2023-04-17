@@ -24,6 +24,9 @@ if result:
     print("Salary", result[9])
     print("level of work", result[10])
     print("Working hours", result[11])
+    print("\n")
+    print("Would you like to \n1.Apply \n2.Go Back ")
+    option = input()
 else:
     print("No job found with the entered ID.")
 
