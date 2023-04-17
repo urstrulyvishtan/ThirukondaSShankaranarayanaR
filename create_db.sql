@@ -25,7 +25,7 @@ coutnry VARCHAR(20) NOT NULL,
 pin INT NOT NULL,
 is_permanent BOOLEAN DEFAULT TRUE NOT NULL,
 nuid INT NOT NULL,
-CONSTRAINT address_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid)
+CONSTRAINT address_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE college(
@@ -44,7 +44,7 @@ projects VARCHAR(1000) NOT NULL,
 resume_name VARCHAR(20),
 nuid INT NOT NULL,
 CONSTRAINT resumes_pk PRIMARY KEY (resume_name),
-CONSTRAINT resumes_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid)
+CONSTRAINT resumes_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -58,7 +58,7 @@ post VARCHAR(30) NOT NULL,
 mail_id VARCHAR(50) NOT NULL,
 college_id INT NOT NULL,
 CONSTRAINT employer_pk PRIMARY KEY (employer_id,dept_id),
-CONSTRAINT employer_fk FOREIGN KEY (college_id) REFERENCES college(college_id)
+CONSTRAINT employer_fk FOREIGN KEY (college_id) REFERENCES college(college_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE hiring_team(
@@ -67,8 +67,8 @@ recruiter_id INT NOT NULL,
 team_id INT AUTO_INCREMENT,
 portal_admin_id INT NOT NULL,
 CONSTRAINT hiring_team_pk PRIMARY KEY (team_id),
-CONSTRAINT hiring_team_fk1 FOREIGN KEY (hr_manager_id) REFERENCES employer(employer_id),
-CONSTRAINT hiring_team_fk2 FOREIGN KEY (recruiter_id) REFERENCES employer(employer_id),
+CONSTRAINT hiring_team_fk1 FOREIGN KEY (hr_manager_id) REFERENCES employer(employer_id) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT hiring_team_fk2 FOREIGN KEY (recruiter_id) REFERENCES employer(employer_id) ON UPDATE CASCADE ON DELETE CASCADE,
 CONSTRAINT hiring_team_fk3 FOREIGN KEY (portal_admin_id) REFERENCES employer(employer_id)
 );
 
@@ -79,7 +79,7 @@ CONSTRAINT level_desc_PK PRIMARY KEY(job_level)
 );
 
 -- JOB POSTING HAS TWO SUB CLASS : {MANDATORY OR}
-CREATE TABLE job_posting_graduate(
+CREATE TABLE job_posting(
 job_id INT AUTO_INCREMENT,
 job_name VARCHAR(20) NOT NULL,
 job_desc VARCHAR(100) NOT NULL,
@@ -92,29 +92,10 @@ created_by INT NOT NULL,
 salary INT NOT NULL,
 lvl_of_work VARCHAR(10) NOT NULL,
 working_hrs INT NOT NULL,
-CONSTRAINT job_posting_graduate_pk PRIMARY KEY (job_id,job_level),
-CONSTRAINT job_posting_graduate_fk1 FOREIGN KEY (job_level) REFERENCES level_desc(job_level),
-CONSTRAINT job_posting_graduate_fk2 FOREIGN KEY (created_by) REFERENCES hiring_team(team_id)
+CONSTRAINT job_posting_pk PRIMARY KEY (job_id,job_level),
+CONSTRAINT job_posting_fk1 FOREIGN KEY (job_level) REFERENCES level_desc(job_level) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT job_posting_fk2 FOREIGN KEY (created_by) REFERENCES hiring_team(team_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
-CREATE TABLE job_posting_under_graduate(
-job_id INT AUTO_INCREMENT,
-job_name VARCHAR(20) NOT NULL,
-job_desc VARCHAR(100) NOT NULL,
-job_level INT NOT NULL,
-job_category VARCHAR(10) NOT NULL,
-location VARCHAR(10) NOT NULL,
-skills VARCHAR(20) NOT NULL,
-mode_of_work enum("Graduate","Undergraduate") NOT NULL,
-created_by INT NOT NULL,
-salary INT NOT NULL,
-lvl_of_work VARCHAR(10) NOT NULL,
-working_hrs INT NOT NULL,
-CONSTRAINT job_posting_under_graduate_pk PRIMARY KEY (job_id),
-CONSTRAINT job_posting_under_graduate_fk1 FOREIGN KEY (job_level) REFERENCES level_desc(job_level),
-CONSTRAINT job_posting_under_graduate_fk2 FOREIGN KEY (created_by) REFERENCES hiring_team(team_id)
-);
-
 
 CREATE TABLE application(
 application_id INT AUTO_INCREMENT,
@@ -127,9 +108,8 @@ application_status ENUM('APPLIED','REJECTED') NOT NULL,
 nuid INT NOT NULL,
 job_applied_to INT NOT NULL,
 CONSTRAINT application_pk PRIMARY KEY (application_id),
-CONSTRAINT application_fk1 FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid),
-CONSTRAINT application_fk2 FOREIGN KEY (job_applied_to) REFERENCES job_posting_graduate(job_id)
--- associated to which table's job_id : graduate or undergraduate. 
+CONSTRAINT application_fk1 FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT application_fk2 FOREIGN KEY (job_applied_to) REFERENCES job_posting(job_id) ON UPDATE CASCADE ON DELETE CASCADE 
 );
 
 #login validation
