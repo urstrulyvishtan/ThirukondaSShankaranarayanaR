@@ -38,9 +38,18 @@ CONSTRAINT college_pk PRIMARY KEY (college_id)
 );
 
 CREATE TABLE resumes(
-education VARCHAR(100) NOT NULL,
-work_experience VARCHAR(1000) NOT NULL,
-projects VARCHAR(1000) NOT NULL,
+college VARCHAR(100) NOT NULL,
+degree VARCHAR(100) NOT NULL,
+project_names VARCHAR(100) NOT NULL,
+project_desc VARCHAR(1000) NOT NULL,
+CGPA DECIMAL(3,2) NOT NULL,
+work_experience BOOLEAN NOT NULL,
+company VARCHAR(100) NOT NULL,
+-- Job position.
+pos VARCHAR(100) NOT NULL,
+-- Job description.
+descrip VARCHAR(1000) NOT NULL, 
+yrs_work_experience INT NOT NULL,
 resume_name VARCHAR(20),
 nuid INT NOT NULL,
 CONSTRAINT resumes_pk PRIMARY KEY (resume_name),
