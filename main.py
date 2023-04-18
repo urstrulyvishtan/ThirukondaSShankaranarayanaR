@@ -17,8 +17,7 @@ except mysql.connector.Error as err:
 cursor = cnx.cursor()
 
 # Call the SQL procedure to delete an application
-args = (1,)
-cursor.callproc('delete_application', args)
+
 
 # Commit the transaction
 cnx.commit()
