@@ -143,6 +143,8 @@ BEGIN
 END$$
 DELIMITER ;
 
+# Viewing users applications
+
 
 
 

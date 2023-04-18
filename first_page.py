@@ -8,3 +8,4 @@ print("Welcome " + nuid + "!")
 
 print("1. View Listings")
 print("2. View your Applications")
+application_option = input()
