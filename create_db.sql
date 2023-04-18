@@ -152,6 +152,29 @@ BEGIN
 END$$
 DELIMITER ;
 
+# Creating job applications from hiring team side.
+DELIMITER $$
+CREATE PROCEDURE create_job(
+	IN p_job_id INT,
+    IN p_job_name VARCHAR(20),
+    IN p_job_desc VARCHAR(100),
+    IN p_job_level INT,
+    IN p_job_category VARCHAR(10),
+    IN p_location VARCHAR(10),
+    IN p_skills VARCHAR(20),
+    IN p_mode_of_work enum("Graduate","Undergraduate"),
+    IN p_created_by INT,
+    IN p_salary INT,
+    IN p_lvl_of_work VARCHAR(10),
+    IN p_working_hrs INT
+)
+BEGIN
+	INSERT INTO job_posting (job_id,job_name,job_desc,job_level,job_category,location,skills,mode_of_work,created_by,salary,lvl_of_work,working_hrs)
+	VALUES (p_job_id,p_job_name,p_job_desc,p_job_level,p_job_category,p_location,p_skills,p_mode_of_work,p_created_by,p_salary,p_lvl_of_work,p_working_hrs);
+END $$
+DELIMITER ;
+
+
 
 
 
