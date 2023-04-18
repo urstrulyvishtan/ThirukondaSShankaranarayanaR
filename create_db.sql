@@ -143,6 +143,14 @@ BEGIN
 END$$
 DELIMITER ;
 
-
+# Viewing users applications
+DELIMITER $$
+CREATE PROCEDURE view_applications(
+	IN nuid INT
+    )
+BEGIN
+	SELECT * FROM application WHERE application.nuid = employementseekers.nuid ;
+END $$
+DELIMITER ;
 
 
