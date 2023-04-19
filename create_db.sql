@@ -37,26 +37,6 @@ contact_mail VARCHAR(50) NOT NULL,
 CONSTRAINT college_pk PRIMARY KEY (college_id)
 );
 
-CREATE TABLE resumes(
-job_id INT NOT NULL,
-school VARCHAR(100) NOT NULL,
-degree VARCHAR(100) NOT NULL,
-gpa VARCHAR(100) NOT NULL,
-company VARCHAR(100) NOT NULL,
-role VARCHAR(100) NOT NULL,
-months_of_exp INT NOT NULL,
-role_description VARCHAR(1000),
-project_title VARCHAR(100) NOT NULL,
-project_description VARCHAR(1000),
-resume_name VARCHAR(20),
-nuid INT NOT NULL,
-CONSTRAINT resumes_pk PRIMARY KEY (resume_name),
-CONSTRAINT resumes_jobID FOREIGN KEY (job_id) REFERENCES job_posting(job_id),
-CONSTRAINT resumes_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-
 CREATE TABLE employer(
 first_name VARCHAR(20) NOT NULL,
 last_name VARCHAR(20) NOT NULL,
@@ -105,6 +85,24 @@ CONSTRAINT job_posting_fk1 FOREIGN KEY (job_level) REFERENCES level_desc(job_lev
 CONSTRAINT job_posting_fk2 FOREIGN KEY (created_by) REFERENCES hiring_team(team_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE resumes(
+job_id INT NOT NULL,
+school VARCHAR(100) NOT NULL,
+degree VARCHAR(100) NOT NULL,
+gpa VARCHAR(100) NOT NULL,
+company VARCHAR(100) NOT NULL,
+role VARCHAR(100) NOT NULL,
+months_of_exp INT NOT NULL,
+role_description VARCHAR(1000),
+project_title VARCHAR(100) NOT NULL,
+project_description VARCHAR(1000),
+resume_name VARCHAR(20),
+nuid INT NOT NULL,
+CONSTRAINT resumes_pk PRIMARY KEY (resume_name),
+CONSTRAINT resumes_jobID FOREIGN KEY (job_id) REFERENCES job_posting(job_id),
+CONSTRAINT resumes_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 CREATE TABLE application(
 application_id INT AUTO_INCREMENT,
 sex VARCHAR(1) NOT NULL,
@@ -116,7 +114,7 @@ application_status ENUM('APPLIED','REJECTED') NOT NULL,
 nuid INT NOT NULL,
 job_applied_to INT NOT NULL,
 CONSTRAINT application_pk PRIMARY KEY (application_id),
-CONSTRAINT application_fk1 FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT application_fk1 FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE RESTRICT ON DELETE RESTRICT,
 CONSTRAINT application_fk2 FOREIGN KEY (job_applied_to) REFERENCES job_posting(job_id) ON UPDATE CASCADE ON DELETE CASCADE 
 );
 
@@ -146,7 +144,7 @@ CREATE PROCEDURE delete_application (
   IN p_id INT
 )
 BEGIN
-  DELETE FROM applications WHERE application_id = p_id;
+  DELETE FROM application WHERE application_id = p_id;
 
 END$$
 DELIMITER ;
