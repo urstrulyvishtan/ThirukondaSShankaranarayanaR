@@ -1,3 +1,4 @@
+from job_details import job_details
 from main import cnx
 import os
 
@@ -73,7 +74,8 @@ def application(job_id):
                         project_description, resume_data))
                 cnx.commit()
                 print("Resume file saved successfully.")
-            # else :
+            else :
+                job_details()
 
     else:
         print("Invalid file path. Please enter a valid path.")

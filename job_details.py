@@ -4,7 +4,7 @@ from main import cnx
 
 
 def job_details(job_id):
-    # create cusror object
+    # create cursor object
     cursor = cnx.cursor()
 
     # Execute SELECT query to retrieve job details for the entered ID
