@@ -1,18 +1,17 @@
-from job_details import option
-from listings import job_id
 from main import cnx
 import os
 
-cursor = cnx.cursor()
 
-if option == 1:
+def application(job_id):
+    cursor = cnx.cursor()
+
     # while True:
     print("Enter your education details")
     school = input("School Name : ")
     degree = input("Degree :")
     gpa = input("GPA : ")
 
-    add_edu = input(" Do you want to add another Education? Yes/No")
+    # add_edu = input(" Do you want to add another Education? Yes/No")
 
     #   if add_edu == "No":
     #      break
@@ -24,7 +23,7 @@ if option == 1:
     months_of_exp = input("Experience in Months : ")
     role_desription = input(" Give short description of your role")
 
-    add_exp = input(" Do you want to add another Experience? Yes/No")
+    # add_exp = input(" Do you want to add another Experience? Yes/No")
 
     #   if add_exp == "No":
     #      break
@@ -34,7 +33,7 @@ if option == 1:
     project_title = input("title of project")
     project_description = input("Description of Project")
 
-    add_proj = input(" Do you want to add another project? Yes/No")
+    # add_proj = input(" Do you want to add another project? Yes/No")
 
     #   if add_proj == "No":
     #      break
@@ -64,16 +63,17 @@ if option == 1:
             submit = input("Do you want to submit \n 1. Submit\n 2. Go Back")
             if submit == 1:
                 insert_query = "INSERT INTO resume (job_id, school, degree, gpa, company, role, months_of_exp, " \
-                               "role_desc, " \
-                               "project_title, project_description, resume_file) VALUES (%s, %s, %s, %s, %s, %s, %s, " \
-                               "%s, " \
-                               "%s, %s, %s) "
+                                   "role_desc, " \
+                                   "project_title, project_description, resume_file) VALUES (%s, %s, %s, %s, %s, %s, " \
+                                   "%s, " \
+                                   "%s, " \
+                                   "%s, %s, %s) "
                 cursor.execute(insert_query, (
-                    job_id, school, degree, gpa, company, role, months_of_exp, role_desription, project_title,
-                    project_description, resume_data))
+                        job_id, school, degree, gpa, company, role, months_of_exp, role_desription, project_title,
+                        project_description, resume_data))
                 cnx.commit()
                 print("Resume file saved successfully.")
-            #else :
+            # else :
 
     else:
         print("Invalid file path. Please enter a valid path.")

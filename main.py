@@ -1,7 +1,5 @@
 import mysql.connector
 
-
-
 username = input("Enter your MySQL username: ")
 password = input("Enter your MySQL password: ")
 try:
@@ -12,7 +10,6 @@ try:
 
 except mysql.connector.Error as err:
     print(f"Error connecting to MySQL: {err}")
-
 
 cursor = cnx.cursor()
 

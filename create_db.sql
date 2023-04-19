@@ -38,12 +38,20 @@ CONSTRAINT college_pk PRIMARY KEY (college_id)
 );
 
 CREATE TABLE resumes(
-education VARCHAR(100) NOT NULL,
-work_experience VARCHAR(1000) NOT NULL,
-projects VARCHAR(1000) NOT NULL,
+job_id INT NOT NULL,
+school VARCHAR(100) NOT NULL,
+degree VARCHAR(100) NOT NULL,
+gpa VARCHAR(100) NOT NULL,
+company VARCHAR(100) NOT NULL,
+role VARCHAR(100) NOT NULL,
+months_of_exp INT NOT NULL,
+role_description VARCHAR(1000),
+project_title VARCHAR(100) NOT NULL,
+project_description VARCHAR(1000),
 resume_name VARCHAR(20),
 nuid INT NOT NULL,
 CONSTRAINT resumes_pk PRIMARY KEY (resume_name),
+CONSTRAINT resumes_jobID FOREIGN KEY (job_id) REFERENCES job_posting(job_id),
 CONSTRAINT resumes_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
