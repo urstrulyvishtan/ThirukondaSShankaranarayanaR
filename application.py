@@ -1,4 +1,5 @@
 from job_details import job_details
+from listings import listings
 from main import cnx
 import os
 
@@ -22,7 +23,7 @@ def application(job_id):
     company = input("Company Name : ")
     role = input("Role : ")
     months_of_exp = input("Experience in Months : ")
-    role_desription = input(" Give short description of your role")
+    role_desription = input(" Give short description of your role : ")
 
     # add_exp = input(" Do you want to add another Experience? Yes/No")
 
@@ -31,15 +32,15 @@ def application(job_id):
 
     # while True:
     print("Enter your projects")
-    project_title = input("title of project")
-    project_description = input("Description of Project")
+    project_title = input("title of project : ")
+    project_description = input("Description of Project : ")
 
     # add_proj = input(" Do you want to add another project? Yes/No")
 
     #   if add_proj == "No":
     #      break
 
-    resume_file = input("Enter the path to your resume file: ")
+    resume_file = input("Enter the path to your resume file : ")
 
     # Save the resume file in the resume table
     if os.path.isfile(resume_file):
@@ -73,7 +74,8 @@ def application(job_id):
                         job_id, school, degree, gpa, company, role, months_of_exp, role_desription, project_title,
                         project_description, resume_data))
                 cnx.commit()
-                print("Resume file saved successfully.")
+                print("Submitted successfully.")
+                listings()
             else :
                 job_details()
 

@@ -5,8 +5,8 @@ import getpass
 
 def login():
     # Create a cursor object
-    username = input("Enter your username: ")
-    password = getpass.getpass("Enter your password: ")
+    username = input("Enter your username: ").strip()
+    password = getpass.getpass("Enter your password: ").strip()
     cursor = cnx.cursor()
 
     # Call the SQL procedure

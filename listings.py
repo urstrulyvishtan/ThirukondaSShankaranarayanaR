@@ -1,3 +1,4 @@
+from first_page import first_page
 from job_details import job_details
 from main import cnx
 
@@ -11,8 +12,11 @@ def listings():
     cursor.execute(display_query)
 
     # Prompt user to enter a job ID
-    job_id = input("Enter a job ID to view details: ")
-    job_details(job_id)
+    job_id = input("Enter a job ID to view details OR Enter 0 to go back")
+    if job_id == 0:
+        first_page()
+    else :
+        job_details(job_id)
 
     # Close the cursor and database connection
     cursor.close()
