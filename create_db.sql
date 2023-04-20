@@ -74,6 +74,7 @@ job_desc VARCHAR(100) NOT NULL,
 job_level INT NOT NULL,
 job_level_desc VARCHAR(100) NOT NULL,
 job_category enum("Undergraduate","Graduate") NOT NULL,
+job_status enum('Open','Closed') NOT NULL,
 location VARCHAR(10) NOT NULL,
 skills VARCHAR(20) NOT NULL,
 mode_of_work enum("Online","Offline") NOT NULL,
@@ -106,12 +107,8 @@ CONSTRAINT resumes_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON U
 
 CREATE TABLE application(
 application_id INT AUTO_INCREMENT,
-sex VARCHAR(1) NOT NULL,
-race VARCHAR(10) NOT NULL,
-consent BOOLEAN DEFAULT TRUE NOT NULL,
-work_study_eligible BOOLEAN DEFAULT FALSE NOT NULL,
-submitted_date DATETIME NOT NULL,
-application_status ENUM('APPLIED','REJECTED') NOT NULL,
+job_name VARCHAR(100) NOT NULL,
+Job_description VARCHAR(100) NOT NULL,
 nuid INT NOT NULL,
 job_applied_to INT NOT NULL,
 CONSTRAINT application_pk PRIMARY KEY (application_id),
@@ -189,6 +186,7 @@ CREATE PROCEDURE create_job(
     IN p_job_level INT,
     IN p_job_level_desc VARCHAR(100),
     IN p_job_category enum("Undergraduate","Graduate"),
+    IN p_job_status enum("Open","Close"),
     IN p_location VARCHAR(10),
     IN p_skills VARCHAR(20),
     IN p_mode_of_work enum("Online","Offline"),
@@ -198,8 +196,8 @@ CREATE PROCEDURE create_job(
     IN p_working_hrs INT
 )
 BEGIN
-	INSERT INTO job_posting (job_id,job_name,job_desc,job_level,job_level_desc,job_category,location,skills,mode_of_work,created_by,salary,contract_period,working_hrs)
-	VALUES (p_job_id,p_job_name,p_job_desc,p_job_level,p_job_level_desc,p_job_category,p_location,p_skills,p_mode_of_work,p_created_by,p_salary,p_contract_period,p_working_hrs);
+	INSERT INTO job_posting (job_id,job_name,job_desc,job_level,job_level_desc,job_category,job_status,location,skills,mode_of_work,created_by,salary,contract_period,working_hrs)
+	VALUES (p_job_id,p_job_name,p_job_desc,p_job_level,p_job_level_desc,p_job_category,p_job_status,p_location,p_skills,p_mode_of_work,p_created_by,p_salary,p_contract_period,p_working_hrs);
 END $$
 DELIMITER ;
 
