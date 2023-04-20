@@ -72,13 +72,14 @@ job_id INT AUTO_INCREMENT,
 job_name VARCHAR(20) NOT NULL,
 job_desc VARCHAR(100) NOT NULL,
 job_level INT NOT NULL,
-job_category VARCHAR(10) NOT NULL,
+job_level_desc VARCHAR(100) NOT NULL,
+job_category enum("Undergraduate","Graduate") NOT NULL,
 location VARCHAR(10) NOT NULL,
 skills VARCHAR(20) NOT NULL,
-mode_of_work enum("Graduate","Undergraduate") NOT NULL,
+mode_of_work enum("Online","Offline") NOT NULL,
 created_by INT NOT NULL,
 salary INT NOT NULL,
-lvl_of_work VARCHAR(10) NOT NULL,
+contract_period INT NOT NULL,
 working_hrs INT NOT NULL,
 CONSTRAINT job_posting_pk PRIMARY KEY (job_id,job_level),
 CONSTRAINT job_posting_fk1 FOREIGN KEY (job_level) REFERENCES level_desc(job_level) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -138,6 +139,26 @@ BEGIN
 END$$
 DELIMITER ;
 
+#login validation
+DELIMITER $$
+CREATE PROCEDURE validate_admin_login_credentials (
+  IN p_username VARCHAR(255),
+  IN p_password VARCHAR(255),
+  OUT p_valid_login BOOLEAN
+)
+BEGIN
+  DECLARE v_count INT DEFAULT 0;
+  SELECT COUNT(*) INTO v_count FROM employer
+  WHERE user_name = p_username AND pwd = p_password;
+  
+  IF v_count > 0 THEN
+    SET p_valid_login = TRUE;
+  ELSE
+    SET p_valid_login = FALSE;
+  END IF;
+END$$
+DELIMITER ;
+
 # withdrawing application
 DELIMITER $$
 CREATE PROCEDURE delete_application (
@@ -166,18 +187,19 @@ CREATE PROCEDURE create_job(
     IN p_job_name VARCHAR(20),
     IN p_job_desc VARCHAR(100),
     IN p_job_level INT,
-    IN p_job_category VARCHAR(10),
+    IN p_job_level_desc VARCHAR(100),
+    IN p_job_category enum("Undergraduate","Graduate"),
     IN p_location VARCHAR(10),
     IN p_skills VARCHAR(20),
-    IN p_mode_of_work enum("Graduate","Undergraduate"),
+    IN p_mode_of_work enum("Online","Offline"),
     IN p_created_by INT,
     IN p_salary INT,
-    IN p_lvl_of_work VARCHAR(10),
+    IN p_contract_period INT,
     IN p_working_hrs INT
 )
 BEGIN
-	INSERT INTO job_posting (job_id,job_name,job_desc,job_level,job_category,location,skills,mode_of_work,created_by,salary,lvl_of_work,working_hrs)
-	VALUES (p_job_id,p_job_name,p_job_desc,p_job_level,p_job_category,p_location,p_skills,p_mode_of_work,p_created_by,p_salary,p_lvl_of_work,p_working_hrs);
+	INSERT INTO job_posting (job_id,job_name,job_desc,job_level,job_level_desc,job_category,location,skills,mode_of_work,created_by,salary,contract_period,working_hrs)
+	VALUES (p_job_id,p_job_name,p_job_desc,p_job_level,p_job_level_desc,p_job_category,p_location,p_skills,p_mode_of_work,p_created_by,p_salary,p_contract_period,p_working_hrs);
 END $$
 DELIMITER ;
 

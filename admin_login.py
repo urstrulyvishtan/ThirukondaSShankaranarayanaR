@@ -6,7 +6,7 @@ Created on Wed Apr 19 06:22:34 2023
 """
 
 from main import cnx
-from admin_first_page import adminOperations
+from admin_operations import adminOperations
 import getpass
 
 def adminLogin():
@@ -37,11 +37,7 @@ def adminLogin():
     if valid_admin_login:
         while(True):
             admin_operation = adminOperations(admin_username,cnx)
-            if (admin_operation == 1):
-                print("Yet to complete")
-            elif (admin_operation == 2):
-                print("Yet to complete")
-            elif (admin_operation == 3):
+            if (admin_operation == 3):
                 logout = 1
                 return logout
                         
