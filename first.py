@@ -5,6 +5,7 @@ Created on Wed Apr 19 07:26:59 2023
 @author: ivarr
 """
 from admin_login import adminLogin
+from login import login
 
 while(True):
     print ("Hello User!")
@@ -13,7 +14,7 @@ while(True):
     print("Press 3 for exit")
     login_selection = int(input("Enter a number: "+"\n"))
     if(login_selection == 1):
-        print("Yet to be completed")
+        login()
     elif(login_selection == 2):
         while(True):
             logout = adminLogin()
