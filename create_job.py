@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-#from main import cnx
 
-def createJob(admin_username,cnx):
+from first import cnx
+
+def createJob(admin_username):
     job_lvl={"I":"Easy Job","II":"Medium Level Job","III":"Hard Job","IV":"Boss level job"}
     emp_id_temp = "SELECT employer_id FROM employer WHERE user_name = %s"
     cursor = cnx.cursor()
@@ -70,6 +71,9 @@ def createJob(admin_username,cnx):
            continue
        elif submit == 3:
            return 1
+       
+    cursor.commit()
+    cursor.close()
        
            
        

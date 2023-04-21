@@ -5,11 +5,11 @@ Created on Wed Apr 19 06:22:34 2023
 @author: ivarr
 """
 
-from main import cnx
+from first import cnx
 from admin_operations import adminOperations
 import getpass
 
-def adminLogin(cnx):
+def adminLogin():
     while(True):
         
         # Create a cursor object
@@ -37,7 +37,7 @@ def adminLogin(cnx):
     
     if valid_admin_login:
         while(True):
-            admin_operation = adminOperations(admin_username,cnx)
+            admin_operation = adminOperations(admin_username)
             if (admin_operation == 3):
                 logout = 1
                 return logout
