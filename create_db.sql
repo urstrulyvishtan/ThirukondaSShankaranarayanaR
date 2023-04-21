@@ -16,17 +16,6 @@ pwd VARCHAR(100) NOT NULL,
 CONSTRAINT employmentseekers_pk PRIMARY KEY (nuid)
 );
 
-CREATE TABLE address(
-house_no INT NOT NULL,
-street_no INT NOT NULL,
-city VARCHAR(20) NOT NULL,
-state VARCHAR(20) NOT NULL,
-coutnry VARCHAR(20) NOT NULL,
-pin INT NOT NULL,
-is_permanent BOOLEAN DEFAULT TRUE NOT NULL,
-nuid INT UNSIGNED NOT NULL,
-CONSTRAINT address_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE CASCADE ON DELETE CASCADE
-);
 
 CREATE TABLE college(
 college_name VARCHAR(70) NOT NULL,
@@ -51,23 +40,6 @@ CONSTRAINT employer_pk PRIMARY KEY (employer_id,dept_id),
 CONSTRAINT employer_fk FOREIGN KEY (college_id) REFERENCES college(college_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE hiring_team(
-hr_manager_id INT NOT NULL,
-recruiter_id INT NOT NULL,
-team_id INT AUTO_INCREMENT,
-portal_admin_id INT NOT NULL,
-CONSTRAINT hiring_team_pk PRIMARY KEY (team_id),
-CONSTRAINT hiring_team_fk1 FOREIGN KEY (hr_manager_id) REFERENCES employer(employer_id) ON UPDATE CASCADE ON DELETE CASCADE,
-CONSTRAINT hiring_team_fk2 FOREIGN KEY (recruiter_id) REFERENCES employer(employer_id) ON UPDATE CASCADE ON DELETE CASCADE,
-CONSTRAINT hiring_team_fk3 FOREIGN KEY (portal_admin_id) REFERENCES employer(employer_id)
-);
-
-CREATE TABLE level_desc(
-job_level INT AUTO_INCREMENT,
-lvl_desc VARCHAR(100) NOT NULL,
-CONSTRAINT level_desc_PK PRIMARY KEY(job_level)
-);
-
 
 CREATE TABLE job_posting(
 job_id INT AUTO_INCREMENT,
@@ -84,9 +56,8 @@ created_by INT NOT NULL,
 salary INT NOT NULL,
 contract_period INT NOT NULL,
 working_hrs INT NOT NULL,
-CONSTRAINT job_posting_pk PRIMARY KEY (job_id,job_level),
-CONSTRAINT job_posting_fk1 FOREIGN KEY (job_level) REFERENCES level_desc(job_level) ON UPDATE CASCADE ON DELETE CASCADE,
-CONSTRAINT job_posting_fk2 FOREIGN KEY (created_by) REFERENCES hiring_team(team_id) ON UPDATE CASCADE ON DELETE CASCADE
+CONSTRAINT job_posting_pk PRIMARY KEY (job_id),
+CONSTRAINT job_posting_fk1 FOREIGN KEY (created_by) REFERENCES employer(employer_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE resumes(
@@ -222,8 +193,8 @@ VALUES ("Khoury College of Computer sciences",01,"Boston", "8573960001" ,"khoury
 	   ("College of Sciences",03,"Boston", "8573960003" ,"cos@northeastern,edu");
 
 INSERT INTO employer(first_name, last_name, employer_id, user_name, pwd, dept_id, post, mail_id, college_id)
-VALUES ("John","Doe",1,"j_doe","123",21,"recruiter","john_doe@neu.com",01),
-	   ("Bruce","Campell",34,"b_camp","456",24,"manager","brucie@neu.com",02),
+VALUES ("John","Doe",1,"j_doe","123",21,"admin","john_doe@neu.com",01),
+	   ("Bruce","Campell",34,"b_camp","456",24,"admin","brucie@neu.com",02),
        ("Tony","Wayne",999,"t_way","789",3,"admin","ynot@neu.com",03);
        
 INSERT INTO employmentseekers(primary_name,last_name,nuid,mobile_no,email_id,program,course,user_name,pwd)
