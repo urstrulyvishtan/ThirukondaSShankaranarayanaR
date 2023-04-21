@@ -1,3 +1,4 @@
+from first import first
 from listings import listings
 from main import cnx
 from login import login
@@ -18,4 +19,4 @@ def first_page(username):
     if application_option == 2:
         viewing_applications(nuid)
     if application_option == 3:
-        login()
+        first()
