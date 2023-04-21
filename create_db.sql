@@ -6,8 +6,8 @@ USE oncampus;
 CREATE TABLE employmentseekers(
 primary_name VARCHAR(20) NOT NULL,
 last_name VARCHAR(20) NOT NULL,
-nuid INT AUTO_INCREMENT,
-mobile_no INT NOT NULL,
+nuid INT UNSIGNED AUTO_INCREMENT,
+mobile_no VARCHAR(10) NOT NULL,
 email_id VARCHAR(50) NOT NULL,
 program VARCHAR(20) NOT NULL,
 course VARCHAR(20) NOT NULL,
@@ -16,23 +16,12 @@ pwd VARCHAR(100) NOT NULL,
 CONSTRAINT employmentseekers_pk PRIMARY KEY (nuid)
 );
 
-CREATE TABLE address(
-house_no INT NOT NULL,
-street_no INT NOT NULL,
-city VARCHAR(20) NOT NULL,
-state VARCHAR(20) NOT NULL,
-coutnry VARCHAR(20) NOT NULL,
-pin INT NOT NULL,
-is_permanent BOOLEAN DEFAULT TRUE NOT NULL,
-nuid INT NOT NULL,
-CONSTRAINT address_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE CASCADE ON DELETE CASCADE
-);
 
 CREATE TABLE college(
 college_name VARCHAR(70) NOT NULL,
 college_id INT AUTO_INCREMENT,
 location VARCHAR(50) NOT NULL,
-contact_no INT(10) NOT NULL,
+contact_no VARCHAR(10) NOT NULL,
 contact_mail VARCHAR(50) NOT NULL,
 CONSTRAINT college_pk PRIMARY KEY (college_id)
 );
@@ -41,29 +30,14 @@ CREATE TABLE employer(
 first_name VARCHAR(20) NOT NULL,
 last_name VARCHAR(20) NOT NULL,
 employer_id INT AUTO_INCREMENT,
+user_name VARCHAR(100) NOT NULL,
+pwd VARCHAR(100) NOT NULL,
 dept_id INT NOT NULL,
 post VARCHAR(30) NOT NULL,
 mail_id VARCHAR(50) NOT NULL,
 college_id INT NOT NULL,
 CONSTRAINT employer_pk PRIMARY KEY (employer_id,dept_id),
 CONSTRAINT employer_fk FOREIGN KEY (college_id) REFERENCES college(college_id) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE TABLE hiring_team(
-hr_manager_id INT NOT NULL,
-recruiter_id INT NOT NULL,
-team_id INT AUTO_INCREMENT,
-portal_admin_id INT NOT NULL,
-CONSTRAINT hiring_team_pk PRIMARY KEY (team_id),
-CONSTRAINT hiring_team_fk1 FOREIGN KEY (hr_manager_id) REFERENCES employer(employer_id) ON UPDATE CASCADE ON DELETE CASCADE,
-CONSTRAINT hiring_team_fk2 FOREIGN KEY (recruiter_id) REFERENCES employer(employer_id) ON UPDATE CASCADE ON DELETE CASCADE,
-CONSTRAINT hiring_team_fk3 FOREIGN KEY (portal_admin_id) REFERENCES employer(employer_id)
-);
-
-CREATE TABLE level_desc(
-job_level INT AUTO_INCREMENT,
-lvl_desc VARCHAR(100) NOT NULL,
-CONSTRAINT level_desc_PK PRIMARY KEY(job_level)
 );
 
 
@@ -74,6 +48,7 @@ job_desc VARCHAR(100) NOT NULL,
 job_level INT NOT NULL,
 job_level_desc VARCHAR(100) NOT NULL,
 job_category enum("Undergraduate","Graduate") NOT NULL,
+job_status enum('Open','Closed') NOT NULL,
 location VARCHAR(10) NOT NULL,
 skills VARCHAR(20) NOT NULL,
 mode_of_work enum("Online","Offline") NOT NULL,
@@ -81,9 +56,8 @@ created_by INT NOT NULL,
 salary INT NOT NULL,
 contract_period INT NOT NULL,
 working_hrs INT NOT NULL,
-CONSTRAINT job_posting_pk PRIMARY KEY (job_id,job_level),
-CONSTRAINT job_posting_fk1 FOREIGN KEY (job_level) REFERENCES level_desc(job_level) ON UPDATE CASCADE ON DELETE CASCADE,
-CONSTRAINT job_posting_fk2 FOREIGN KEY (created_by) REFERENCES hiring_team(team_id) ON UPDATE CASCADE ON DELETE CASCADE
+CONSTRAINT job_posting_pk PRIMARY KEY (job_id),
+CONSTRAINT job_posting_fk1 FOREIGN KEY (created_by) REFERENCES employer(employer_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE resumes(
@@ -98,7 +72,7 @@ role_description VARCHAR(1000),
 project_title VARCHAR(100) NOT NULL,
 project_description VARCHAR(1000),
 resume_name VARCHAR(20),
-nuid INT NOT NULL,
+nuid INT UNSIGNED NOT NULL,
 CONSTRAINT resumes_pk PRIMARY KEY (resume_name),
 CONSTRAINT resumes_jobID FOREIGN KEY (job_id) REFERENCES job_posting(job_id),
 CONSTRAINT resumes_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE CASCADE ON DELETE CASCADE
@@ -106,13 +80,9 @@ CONSTRAINT resumes_fk FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON U
 
 CREATE TABLE application(
 application_id INT AUTO_INCREMENT,
-sex VARCHAR(1) NOT NULL,
-race VARCHAR(10) NOT NULL,
-consent BOOLEAN DEFAULT TRUE NOT NULL,
-work_study_eligible BOOLEAN DEFAULT FALSE NOT NULL,
-submitted_date DATETIME NOT NULL,
-application_status ENUM('APPLIED','REJECTED') NOT NULL,
-nuid INT NOT NULL,
+job_name VARCHAR(100) NOT NULL,
+Job_description VARCHAR(100) NOT NULL,
+nuid INT UNSIGNED NOT NULL,
 job_applied_to INT NOT NULL,
 CONSTRAINT application_pk PRIMARY KEY (application_id),
 CONSTRAINT application_fk1 FOREIGN KEY (nuid) REFERENCES employmentseekers(nuid) ON UPDATE RESTRICT ON DELETE RESTRICT,
@@ -189,6 +159,7 @@ CREATE PROCEDURE create_job(
     IN p_job_level INT,
     IN p_job_level_desc VARCHAR(100),
     IN p_job_category enum("Undergraduate","Graduate"),
+    IN p_job_status enum("Open","Close"),
     IN p_location VARCHAR(10),
     IN p_skills VARCHAR(20),
     IN p_mode_of_work enum("Online","Offline"),
@@ -198,8 +169,36 @@ CREATE PROCEDURE create_job(
     IN p_working_hrs INT
 )
 BEGIN
-	INSERT INTO job_posting (job_id,job_name,job_desc,job_level,job_level_desc,job_category,location,skills,mode_of_work,created_by,salary,contract_period,working_hrs)
-	VALUES (p_job_id,p_job_name,p_job_desc,p_job_level,p_job_level_desc,p_job_category,p_location,p_skills,p_mode_of_work,p_created_by,p_salary,p_contract_period,p_working_hrs);
+	INSERT INTO job_posting (job_id,job_name,job_desc,job_level,job_level_desc,job_category,job_status,location,skills,mode_of_work,created_by,salary,contract_period,working_hrs)
+	VALUES (p_job_id,p_job_name,p_job_desc,p_job_level,p_job_level_desc,p_job_category,p_job_status,p_location,p_skills,p_mode_of_work,p_created_by,p_salary,p_contract_period,p_working_hrs);
 END $$
 DELIMITER ;
+
+## Create a procedure to update job_status value
+DELIMITER $$
+CREATE PROCEDURE update_job_status(
+	IN job_id INT, 
+    IN new_status VARCHAR(255)
+)
+BEGIN
+	UPDATE job_posting 
+    SET job_status = new_status
+    where job_id = job_id;
+END $$
+DELIMITER ;
+
+INSERT INTO college(college_name, college_id, location, contact_no, contact_mail)
+VALUES ("Khoury College of Computer sciences",01,"Boston", "8573960001" ,"khoury@northeastern.edu"),
+	   ("College of Engineering",02,"Boston", "8573960002" ,"coe@northeastern.edu"),
+	   ("College of Sciences",03,"Boston", "8573960003" ,"cos@northeastern,edu");
+
+INSERT INTO employer(first_name, last_name, employer_id, user_name, pwd, dept_id, post, mail_id, college_id)
+VALUES ("John","Doe",1,"j_doe","123",21,"admin","john_doe@neu.com",01),
+	   ("Bruce","Campell",34,"b_camp","456",24,"admin","brucie@neu.com",02),
+       ("Tony","Wayne",999,"t_way","789",3,"admin","ynot@neu.com",03);
+       
+INSERT INTO employmentseekers(primary_name,last_name,nuid,mobile_no,email_id,program,course,user_name,pwd)
+VALUES ("Jack","Eastwood",123456789,"9443455114","jackie@neu.edu","Masters","Computer Science","jackie","987"),
+	   ("Presephone","Odin",987654321,"8072002116","podin@neu.edu","Bachelors","Bioengineering","presdin","5t6y"),
+       ("Cassandra","Alex",456987213,"7465830275","cassie@neu.edu","Doctorate","Political Science","cassex","uio89");
 

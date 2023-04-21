@@ -38,6 +38,9 @@ def createJob(admin_username,cnx):
            else:
                print("Enter a valid input \n")
                
+       
+       job_status = "Open"
+               
        location = str(input("Enter the location of the job: \n"))
        skills = str(input("Enter the skills required for the job: \n"))
        

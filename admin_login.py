@@ -9,8 +9,9 @@ from main import cnx
 from admin_operations import adminOperations
 import getpass
 
-def adminLogin():
+def adminLogin(cnx):
     while(True):
+        
         # Create a cursor object
         admin_username = input("Enter your username: ")
         admin_password = getpass.getpass("Enter your password: ")
