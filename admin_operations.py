@@ -5,6 +5,7 @@ Created on Wed Apr 19 06:58:11 2023
 @author: ivarr
 """
 from create_job import createJob
+from update_job_status import updateJob
 
 def adminOperations(admin_username,cnx):
     
@@ -23,7 +24,7 @@ def adminOperations(admin_username,cnx):
                continue
         
         elif(admin_operation == 2):
-           print("TBD")
+           updateJob(admin_username,cnx)
         
         elif(admin_operation == 3):
            return admin_operation
